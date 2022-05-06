@@ -7,7 +7,7 @@ import './Signup_support.css'
 import Signupform from './Signupform'
 function Signupsupport() {
   const navigate = useNavigate()
-  const url=''
+  const url='http://127.0.0.1:8000/client/create'
   const [values, setValues] = useState({
     username: '',
     password: '',
@@ -29,7 +29,7 @@ function Signupsupport() {
       errorMessage:"Username should be 3-10 characters long",
       placeholder:'Enter your username',
       label:'username',
-      pattern:"^[a-zA-Z][a-zA-Z0-9]{3,15}$",
+      // pattern:"^[a-zA-Z][a-zA-Z0-9]{3,15}$",
       required:true
     },
     {
@@ -38,22 +38,13 @@ function Signupsupport() {
       type:'password',
       errorMessage:"Password should be 8-20 characters and it should include atleast 1 letter,1 number and 1 special character",
       placeholder:'Enter your password',
-      pattern:'^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,20}$',
+      // pattern:'^(?=.[0-9])(?=.[a-zA-Z])(?=.[!@#$%^&])[a-zA-Z0-9!@#$%^&*]{8,20}$',
       label:'password',
       required:true
     },
+    
     {
       id:3,
-      name:'confirmpassword',
-      type:'password',
-      errorMessage:"Passwords don't match",
-      placeholder:'confirmpassword',
-      label:'confirmpassword',
-      pattern:values.password,
-      required:true
-    },
-    {
-      id:4,
       name:'email',
       type:'email',
       errorMessage:"It should be a valid email address",
@@ -61,35 +52,28 @@ function Signupsupport() {
       label:'email',
       required:true
     },
+    
     {
-      id:5,
-      name:'fullname',
+      id:4,
+      name:'Company',
       type:'text',
       
-      placeholder:'Enter your fullname',
-      label:'fullname'
-    },
-    {
-      id:6,
-      name:'phone',
-      type:'number',
-      errorMessage:"it should be 10 digits",
-      placeholder:'Enter your phone number',
-      label:'phone',
-      pattern:"^[0-9]{10}$",
+      placeholder:'Enter your company name',
+      label:'Company',
+  
       required:true
     },
   ]
   
-
+ 
   const handlesubmit=(e)=>{
     e.preventDefault()
+    console.log("helo2")
     Axios.post(url,{
       username:values.username,
-      password:values.password,
       email:values.email,
-      fullname:values.fullname,
-      phone:values.phone
+      password:values.password,
+      company:values.phone
     })
     .then(res=>{
       console.log(res.values)
@@ -105,7 +89,7 @@ function Signupsupport() {
   return (
     <div className='app'>
     <form onSubmit={handlesubmit} className="forms">
-      <h1>Signup</h1>
+      <h1 className='signup'>Signup</h1>
       {inputs.map((input)=>(
         <Signupform key={input.id} {...input} value={values[input.name]} onChange={onChange}/>
       ))}

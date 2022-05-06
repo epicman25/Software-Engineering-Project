@@ -1,0 +1,10 @@
+.outerbox{
+    background-color: aqua;
+    width: 400px;
+    height: 400px;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    margin-left: 400px;
+    margin-top: 40px;
+}
