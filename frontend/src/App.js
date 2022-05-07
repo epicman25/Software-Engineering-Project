@@ -8,8 +8,9 @@ import Signupsupport from './Components/login/Signup_support';
 import Signin from './Components/login/Signin';
 import Forgot_pasword from './Components/login/Forgot_pasword';
 import Signin_support from './Components/login/Signin_support';
-
-
+import Client_newproject from './Components/Client/Client_newproject';
+import Client_viewcurrproj from './Components/Client/Client_viewcurrproj';
+import Client_viewpastproj from './Components/Client/Client_viewpastproj';
 function App() {
   return (
    <>
@@ -24,7 +25,10 @@ function App() {
         <Route path="/devdashboard" element={<DevDashboard/>} />
         <Route path="/clientdashboard" element={<ClientDashboard/>} />
         <Route path="/managerdashboard" element={<ManagerDashboard/>} />
-        <Route path="/signin_support" element={<Signin_support/>} />
+        <Route path="/signin_support" element={<Signin_support/>} />\
+        <Route path="/client_newproject" element={<Client_newproject/>} />
+        <Route path="/client_viewcurrproj" element={<Client_viewcurrproj/>} />
+        <Route path="/client_viewpastproj" element={<Client_viewpastproj/>} />
       </Routes>      
     </Router>
     
