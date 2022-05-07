@@ -33,9 +33,11 @@ class Developer(Model):
     password = fields.CharField(max_length=100,null = False)
     is_verified = fields.BooleanField(default = True)
     join_date = fields.DatetimeField(default = datetime.utcnow)
+    current_assigned_project_id = fields.IntField(null = True)
+    is_assigned = fields.CharField(max_length=50,default = "No")
     company = fields.CharField(max_length=50,null = True)
-    current_assigned_project = fields.ForeignKeyField('models.Project', related_name='developers', on_delete=fields.CASCADE,null = True)
     specialization = fields.CharField(max_length=100,null = True)
+    
 
 
 class ProjectManager(Model):
@@ -60,10 +62,11 @@ project_pydanticUpdateInput = pydantic_model_creator(Project,name = 'ProjectUpda
 project_pydanticUpdateDev = pydantic_model_creator(Project,name = 'ProjectUpdateDev',exclude_readonly=True,exclude=('id','created_at','updated_at','client_id','name','description'))
 project_pydanticUpdateClient = pydantic_model_creator(Project,name = 'ProjectUpdateClient',exclude_readonly=True,exclude=('id','created_at','updated_at','estimated_deadline','client_id','status'))
 
-developer_pydantic = pydantic_model_creator(Developer,name = 'DeveloperPydantic',exclude=('is_verified','current_assigned_project'))
-developer_pydanticInput = pydantic_model_creator(Developer,name = 'DeveloperInput',exclude_readonly=True,exclude=('is_verified','current_assigned_project','join_date'))
-developer_login = pydantic_model_creator(Developer,name = 'DeveloperLogin',exclude = ('id','is_verified','current_assigned_project','join_date','company','specialization','name'))
+developer_pydantic = pydantic_model_creator(Developer,name = 'DeveloperPydantic',exclude=('is_verified','current_assigned_project_id','is_assigned'))
+developer_pydanticInput = pydantic_model_creator(Developer,name = 'DeveloperInput',exclude_readonly=True,exclude=('is_verified','current_assigned_project_id','join_date'))
+developer_login = pydantic_model_creator(Developer,name = 'DeveloperLogin',exclude = ('id','is_verified','current_assigned_project_id','join_date','company','specialization','name'))
 developer_pydanticOutput = pydantic_model_creator(Developer,name = 'DeveloperOutput',exclude = ('password','join_date'))
+dev_project_assign = pydantic_model_creator(Developer,name = 'DevProjectAssign',exclude = ('id','is_verified','name','email','password','join_date','company','specialization'))
 
 projectmanager_pydantic = pydantic_model_creator(ProjectManager,name = 'ProjectManagerPydantic',exclude=('is_verified'))
 projectmanager_login = pydantic_model_creator(ProjectManager,name = 'ProjectManagerLogin',exclude = ('id','is_verified','join_date','name'))

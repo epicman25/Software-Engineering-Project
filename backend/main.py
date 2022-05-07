@@ -61,7 +61,7 @@ async def generate_token(request_form: OAuth2PasswordRequestForm = Depends()):
 @app.post('/client/create')
 async def create_client(client: client_pydanticInput):
     client_info = client.dict(exclude_unset=True)
-    client_info["password"] = get_password_hash(client_info["password"])
+    client_info["password"] = hash_passowrd(client_info["password"])
     client_obj = await Client.create(**client_info)
     new_client = await client_pydantic.from_tortoise_orm(client_obj)
     await send_email([new_client.email], new_client)
@@ -185,7 +185,7 @@ async def client_login(client: client_pydanticInput):
     client_info = client.dict(exclude_unset=True)
     client_obj = await Client.get(email=client_info["email"])
     if client_obj:
-        if client_obj.passowrd == hash_passowrd(client_info["password"]):
+        if client_obj.password == hash_passowrd(client_info["password"]):
             client_obj.is_logged_in = True
             await client_obj.save()
             return{
@@ -217,6 +217,7 @@ async def create_project(project: project_pydanticInput):
             "data": f"Project {project_obj.name} has not been created."
         }
 
+
 @app.get("/project/{id}")
 async def get_project(id: int):
     project_obj = await Project.get(id=id)
@@ -225,7 +226,8 @@ async def get_project(id: int):
         return {
             "status": "ok",
             "data": project_obj
-            }
+        }
+
 
 @app.get("/projects")
 async def get_projects():
@@ -233,7 +235,8 @@ async def get_projects():
     return {
         "status": "ok",
         "data": response
-        }
+    }
+
 
 @app.get("/projects-client/{id}")
 async def get_projects_client(id: int):
@@ -242,7 +245,8 @@ async def get_projects_client(id: int):
         "status": "ok",
         "data": response
 
-        }
+    }
+
 
 @app.put("/project-dev/{id}")
 async def update_project(id: int, project: project_pydanticUpdateDev):
@@ -254,9 +258,11 @@ async def update_project(id: int, project: project_pydanticUpdateDev):
     return {
         "status": "ok",
         "data": response
-        }
+    }
+
+
 @app.put("/project-client/{id}")
-async def update_project(id: int, project: project_pydanticUpdateClient):
+async def update_project_dev(id: int, project: project_pydanticUpdateClient):
     project_info = await Project.get(id=id)
     project = project.dict(exclude_unset=True)
     await project_info.update_from_dict(project)
@@ -265,11 +271,29 @@ async def update_project(id: int, project: project_pydanticUpdateClient):
     return {
         "status": "ok",
         "data": response
-        }
+    }
 
+@app.put("/assign-project/{id}")
+async def assign_project(id: int, developer: dev_project_assign):
+    dev_obj = await Developer.get(id=id)
+    developer = developer.dict(exclude_unset=True)
+    print(developer)
+    await dev_obj.update_from_dict(developer)
+    await dev_obj.save()
+    response = await developer_pydantic.from_tortoise_orm(dev_obj)
+    print(response)
+    return {
+        "status": "ok",
+        "data": response
+    }
 
-
-
+@app.get("/developers")
+async def get_developers():
+    response = await developer_pydantic.from_queryset(Developer.all())
+    return {
+        "status": "ok",
+        "data": response
+    }
 
 @app.get("/")
 def index():
