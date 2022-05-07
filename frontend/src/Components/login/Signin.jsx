@@ -1,59 +1,104 @@
-import React from 'react'
-import {useState} from 'react'
-import Axios from 'axios'
-import {useNavigate} from 'react-router-dom'
-import './Signin.css'
+import React from "react";
+import { useState } from "react";
+import Axios from "axios";
+import { useNavigate } from "react-router-dom";
+import "./Signin.css";
 function Signin() {
-  const navigate = useNavigate()
-  const url=""
-  const [data,setData]=useState({
-    username:"",
-    password:""
-  })
+  const navigate = useNavigate();
+  const url = "";
+  const [data, setData] = useState({
+    username: "",
+    password: "",
+  });
 
-  function handle(e){
-    const newdata={ ...data}
-    newdata[e.target.id]=e.target.value
-    setData(newdata)
-    console.log(newdata)
+  function handle(e) {
+    const newdata = { ...data };
+    newdata[e.target.id] = e.target.value;
+    setData(newdata);
+    console.log(newdata);
   }
 
-  function submit(e){
-    if (data.username==="client" && data.password==="client"){
-      alert("Login Success as a client")
-      navigate('/clientDashboard')
+  function submit(e) {
+    if (data.username === "client" && data.password === "client") {
+      alert("Login Success as a client");
+      navigate("/clientDashboard");
     }
-    if (data.username==="dev" && data.password==="dev"){
-      alert("Login Success as a developer")
-      navigate('/devDashboard')
+    if (data.username === "dev" && data.password === "dev") {
+      alert("Login Success as a developer");
+      navigate("/devDashboard");
     }
-    if(data.username==="manager" && data.password==="manager"){
-      alert("Login Success as a manager")
-      navigate('/managerdashboard')
+    if (data.username === "manager" && data.password === "manager") {
+      alert("Login Success as a manager");
+      navigate("/managerdashboard");
     }
-    e.preventDefault()
-    Axios.post(url,{
-      username:data.username,
-      password:data.password
-    })
-    
-    .then(res=>{
-      console.log(res.data)
-    })
+    e.preventDefault();
+    Axios.post(url, {
+      username: data.username,
+      password: data.password,
+    }).then((res) => {
+      console.log(res.data);
+    });
   }
 
   return (
-    <div className='heading'>
-      <h1 >Signin</h1>
-      <div className='outerbox'>
-      <form onSubmit={(e)=> submit(e)}>
-        <input onChange={(e)=>handle(e)} id="username" value={data.username} placeholder='username' type='text'/>
-        <input onChange={(e)=>handle(e)} id="password" value={data.password} placeholder='password' type='password' />
-        <button type='submit'>Submit</button>
-      </form>
+    <div className="signin_page">
+      <button className="btn_nav" onClick={() => navigate("/")}>
+        Home
+      </button>
+      <div className="signin_title">
+        <h1>Sign-In</h1>
       </div>
+      <form onSubmit={(e) => submit(e)}>
+        <div className="signin_container">
+          <div className="select m-2">
+            <select
+              className="form-select select-form"
+              aria-label="Default select example"
+            >
+              <option selected>Client</option>
+              <option value="1">Project manager</option>
+              <option value="2">Developer</option>
+            </select>
+          </div>
+          <div className="signin_inputs">
+            <div className="signin_fields m-4">
+              <label>Username</label>
+              <input
+                onChange={(e) => handle(e)}
+                id="username"
+                value={data.username}
+                placeholder="Enter Username"
+                type="text"
+                className="m-3 mt-0"
+              />
+              <label>Password</label>
+              <input
+                onChange={(e) => handle(e)}
+                id="password"
+                value={data.password}
+                placeholder="Enter Password"
+                type="password"
+                className="m-3 mt-0"
+              />
+              <button type="submit" class="btn btn-primary submit w-25 mt-3">
+                Submit
+              </button>
+              <div className="m-2">
+                <label className="m-2">New User?</label>
+                <button
+                  type="button"
+                  className="btn btn-primary p-0"
+                  onClick={() => navigate("/signup_support")}
+                >
+                  Signup
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
     </div>
-  )
+  );
 }
 
-export default Signin
+export default Signin;
