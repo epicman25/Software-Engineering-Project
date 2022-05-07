@@ -1,34 +1,66 @@
-import React from 'react'
-import '../../../node_modules/bootstrap/dist/css/bootstrap.css';
-import {useState} from 'react'
-import axios from 'axios';
+import React from "react";
+import "../../../node_modules/bootstrap/dist/css/bootstrap.css";
+import { useState } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+
 function Client_newproject() {
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const navigate = useNavigate();
 
-  const [title,setTitle]=useState('')
-  const [description,setDescription]=useState('')
-
-
-  const handleSubmit=(e)=>{
-    axios.post('',{
-      'name':'title','description':'description','client_id':'client_id','status':'status','estimated_deadline':'estd_time'
-    })
-  }
+  const handleSubmit = (e) => {
+    axios.post("", {
+      name: "title",
+      description: "description",
+      client_id: "client_id",
+      status: "status",
+      estimated_deadline: "estd_time",
+    });
+  };
 
   return (
     <div>
-      <h1>Add a new project</h1>
-      <div className="App list-group-item justify-content-center align-items-center mx-auto " style={{'width':'400px','backgroundColor':'white','marginTop':'15px'}}>
-             <input className='form-control titleIn' placeholder='Enter the project title' onChange={event => setTitle(event.target.value)}/>
-
-             <textarea type="textArea" className='mb-2 form-control desIn' placeholder='Enter the project Description' style={{'height':'150px'}} onChange={event => setDescription(event.target.value)}></textarea>
-             
-
-            <button className='btn btn-outline-primary mx-2 mb-3' style={{'borderRadius':'50px','fontWeight':'bold'}} onsClick={handleSubmit}>Add</button>
+      <button className="btn_nav" onClick={() => navigate("/clientdashboard")}>
+        Home
+      </button>
+      <div className="signup_title">
+        <h1>Add a new project</h1>
       </div>
+      <div
+        className="App mx-auto "
+        style={{ width: "400px", backgroundColor: "white", marginTop: "15px" }}
+      >
+        <div className="signup_container mt-3">
+          <div className="signup_inputs">
+            <div className="add_project_inputs m-3 mb-0 w-50 add_project_container">
+              <input
+                className="form-control titleIn mx-0"
+                placeholder="Enter the project title"
+                onChange={(event) => setTitle(event.target.value)}
+              />
 
+              <textarea
+                type="textArea"
+                className="mb-2 form-control desIn"
+                placeholder="Enter the project Description"
+                style={{ height: "150px" }}
+                onChange={(event) => setDescription(event.target.value)}
+              ></textarea>
 
+              <button
+                className="btn btn-primary mx-2 mb-3"
+                style={{ borderRadius: "50px", fontWeight: "bold" }}
+                onsClick={handleSubmit}
+              >
+                Add
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-  )
+  );
 }
 
-export default Client_newproject
+export default Client_newproject;

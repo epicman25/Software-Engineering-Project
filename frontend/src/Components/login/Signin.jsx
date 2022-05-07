@@ -80,14 +80,17 @@ function Signin() {
                 type="password"
                 className="m-3 mt-0"
               />
-              <button type="submit" class="btn btn-primary submit w-25 mt-3">
+              <button
+                type="submit"
+                class="btn btn-primary submit w-25 m-0 mt-3"
+              >
                 Submit
               </button>
               <div className="m-2">
                 <label className="m-2">New User?</label>
                 <button
                   type="button"
-                  className="btn btn-primary p-0"
+                  className="btn btn-primary p-0 m-0"
                   onClick={() => navigate("/signup_support")}
                 >
                   Signup

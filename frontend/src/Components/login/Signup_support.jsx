@@ -95,7 +95,7 @@ function Signupsupport() {
       </div>
       <form onSubmit={handlesubmit}>
         <div className="signup_container">
-          <div className="signup_inputs">
+          <div className="signup_inputs mx-0">
             <div className="signup_fields m-4">
               {inputs.map((input) => (
                 <Signupform
@@ -106,14 +106,17 @@ function Signupsupport() {
                 />
               ))}
 
-              <button type="submit" class="btn btn-primary submit w-25 mt-3">
+              <button
+                type="submit"
+                class="btn btn-primary submit w-25 mt-3 mx-0"
+              >
                 Submit
               </button>
               <div className="m-2">
                 <label className="m-2">Already an user?</label>
                 <button
                   type="button"
-                  className="btn btn-primary p-0"
+                  className="btn btn-primary p-0 mx-0"
                   onClick={() => navigate("/signin_support")}
                 >
                   Signin

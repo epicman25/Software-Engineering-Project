@@ -85,7 +85,10 @@ function General() {
               </div>
             </li>
             <li>
-              <button className="nav_btn" onClick={() => navigate("/signin")}>
+              <button
+                className="nav_btn m-0"
+                onClick={() => navigate("/signin")}
+              >
                 Sign-in/Sign-up
               </button>
             </li>
