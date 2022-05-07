@@ -1,4 +1,5 @@
-from fastapi import FastAPI
+from urllib import response
+from fastapi import Body, FastAPI
 from tortoise.contrib.fastapi import register_tortoise
 from models import *
 from authentication import get_password_hash
@@ -41,6 +42,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
 def hash_passowrd(password):
     return hashlib.sha256(password.encode()).hexdigest()
 
@@ -74,11 +76,18 @@ async def create_dev(dev: developer_pydanticInput):
     dev_info = dev.dict(exclude_unset=True)
     dev_info["password"] = hash_passowrd(dev_info["password"])
     dev_obj = await Developer.create(**dev_info)
-    new_dev = await developer_pydantic.from_tortoise_orm(dev_obj)
-    return{
-        "status": "ok",
-        "data": f"Hellooo, {new_dev.name} has been created."
-    }
+    if dev_obj:
+        new_dev = await developer_pydantic.from_tortoise_orm(dev_obj)
+        return{
+            "status": "ok",
+            "data": f"Hellooo, {new_dev.name} has been created."
+        }
+    else:
+        return{
+            "status": "error",
+            "data": f"Sorry, {dev.name} has not been created.",
+            "error": "developer already exists"
+        }
 
 
 @app.post('/pm/create')
@@ -143,7 +152,7 @@ async def developer_login(developer: developer_login):
             return{
                 "status": "ok",
                 "data": f"Hello {dev_obj.name}, you are logged in.",
-                "id" : dev_obj.id
+                "id": dev_obj.id
             }
         else:
             return{
@@ -172,25 +181,99 @@ async def pm_login(pm: projectmanager_login):
 
 
 @app.post('/user/client')
-async def client_login(client: client_pydanticInput = Depends(get_current_user)):
-    return{
-        "status": "ok",
-        "client_data":
-        {
-            "username": client.username,
-            "email": client.email,
-            "is_verified": client.is_verified,
-            "joined_at": client.join_date.strftime("%d %b %Y"),
-            "company": client.company,
+async def client_login(client: client_pydanticInput):
+    client_info = client.dict(exclude_unset=True)
+    client_obj = await Client.get(email=client_info["email"])
+    if client_obj:
+        if client_obj.passowrd == hash_passowrd(client_info["password"]):
+            client_obj.is_logged_in = True
+            await client_obj.save()
+            return{
+                "status": "ok",
+                "data": f"Hello {client_obj.username}, you are logged in."
+            }
+        else:
+            return{
+                "status": "error",
+                "data": f"Invalid email or password."
+            }
+
+
+@app.post("/project_create")
+async def create_project(project: project_pydanticInput):
+    project_info = project.dict(exclude_unset=True)
+    if len(project_info["description"]) <= 0:
+        project_info["description"] = "No description"
+    project_obj = await Project.create(**project_info)
+    if project_obj:
+        project_obj = await project_pydantic.from_tortoise_orm(project_obj)
+        return {
+            "status": "ok",
+            "data": project_obj
         }
-    }
+    else:
+        return{
+            "status": "error",
+            "data": f"Project {project_obj.name} has not been created."
+        }
+
+@app.get("/project/{id}")
+async def get_project(id: int):
+    project_obj = await Project.get(id=id)
+    if project_obj:
+        project_obj = await project_pydantic.from_tortoise_orm(project_obj)
+        return {
+            "status": "ok",
+            "data": project_obj
+            }
+
+@app.get("/projects")
+async def get_projects():
+    response = await project_pydantic.from_queryset(Project.all())
+    return {
+        "status": "ok",
+        "data": response
+        }
+
+@app.get("/projects-client/{id}")
+async def get_projects_client(id: int):
+    response = await project_pydantic.from_queryset(Project.filter(client_id=id))
+    return {
+        "status": "ok",
+        "data": response
+
+        }
+
+@app.put("/project-dev/{id}")
+async def update_project(id: int, project: project_pydanticUpdateDev):
+    project_info = await Project.get(id=id)
+    project = project.dict(exclude_unset=True)
+    await project_info.update_from_dict(project)
+    await project_info.save()
+    response = await project_pydantic.from_tortoise_orm(project_info)
+    return {
+        "status": "ok",
+        "data": response
+        }
+@app.put("/project-client/{id}")
+async def update_project(id: int, project: project_pydanticUpdateClient):
+    project_info = await Project.get(id=id)
+    project = project.dict(exclude_unset=True)
+    await project_info.update_from_dict(project)
+    await project_info.save()
+    response = await project_pydantic.from_tortoise_orm(project_info)
+    return {
+        "status": "ok",
+        "data": response
+        }
+
+
+
 
 
 @app.get("/")
 def index():
     return {"message": "Hello World"}
-
-
 
 
 register_tortoise(

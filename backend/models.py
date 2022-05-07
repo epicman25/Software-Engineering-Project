@@ -1,3 +1,4 @@
+from enum import unique
 from tortoise.models import Model
 from tortoise import fields
 from datetime import datetime
@@ -6,7 +7,7 @@ from tortoise.contrib.pydantic import pydantic_model_creator
 
 class Client(Model):
     id = fields.IntField(pk=True,index = True)
-    username = fields.CharField(max_length=20,index = True,null = False)
+    username = fields.CharField(max_length=20,unique=True,index = True,null = False)
     email = fields.CharField(max_length=200,unique = True,null = False)
     password = fields.CharField(max_length=100,null = False)
     is_verified = fields.BooleanField(default = False)
@@ -18,11 +19,11 @@ class Project(Model):
     id = fields.IntField(pk=True,index = True)
     name = fields.CharField(max_length=50,null = False)
     description = fields.TextField(null = True)
-    client = fields.ForeignKeyField('models.Client', related_name='projects', on_delete=fields.CASCADE)
+    client_id = fields.IntField(null = True)
     status = fields.CharField(max_length=200,null = True)
     created_at = fields.DatetimeField(auto_now_add=True)
     updated_at = fields.DatetimeField(auto_now=True)
-    estimated_deadline = fields.DatetimeField(null = True)
+    estimated_deadline = fields.DateField(null = True)
 
 
 class Developer(Model):
@@ -55,6 +56,9 @@ client_pydanticOutput = pydantic_model_creator(Client,name = 'ClientOutput',excl
 project_pydantic = pydantic_model_creator(Project,name = 'ProjectPydantic',exclude=('created_at','updated_at'))
 project_pydanticInput = pydantic_model_creator(Project,name = 'ProjectInput',exclude_readonly=True,exclude=('created_at','updated_at'))
 project_pydanticOutput = pydantic_model_creator(Project,name = 'ProjectOutput',exclude = ('id'))
+project_pydanticUpdateInput = pydantic_model_creator(Project,name = 'ProjectUpdateInput',exclude_readonly=True,exclude=('id','created_at','updated_at','client_id'))
+project_pydanticUpdateDev = pydantic_model_creator(Project,name = 'ProjectUpdateDev',exclude_readonly=True,exclude=('id','created_at','updated_at','client_id','name','description'))
+project_pydanticUpdateClient = pydantic_model_creator(Project,name = 'ProjectUpdateClient',exclude_readonly=True,exclude=('id','created_at','updated_at','estimated_deadline','client_id','status'))
 
 developer_pydantic = pydantic_model_creator(Developer,name = 'DeveloperPydantic',exclude=('is_verified','current_assigned_project'))
 developer_pydanticInput = pydantic_model_creator(Developer,name = 'DeveloperInput',exclude_readonly=True,exclude=('is_verified','current_assigned_project','join_date'))
