@@ -209,7 +209,7 @@ async def create_project(project: project_pydanticInput):
         project_obj = await project_pydantic.from_tortoise_orm(project_obj)
         return {
             "status": "ok",
-            "data": f"Project {project_obj.name} has been created."
+            "data": project_obj
         }
     else:
         return{
@@ -233,6 +233,15 @@ async def get_projects():
     return {
         "status": "ok",
         "data": response
+        }
+
+@app.get("/projects-client/{id}")
+async def get_projects_client(id: int):
+    response = await project_pydantic.from_queryset(Project.filter(client_id=id))
+    return {
+        "status": "ok",
+        "data": response
+
         }
 
 @app.put("/project-dev/{id}")
@@ -260,7 +269,8 @@ async def update_project(id: int, project: project_pydanticUpdateClient):
 
 
 
-        
+
+
 @app.get("/")
 def index():
     return {"message": "Hello World"}
