@@ -10,14 +10,15 @@ function Client_newproject() {
   const navigate = useNavigate();
 
   const handleSubmit = (e) => {
-    axios.post("", {
-      name: "title",
-      description: "description",
-      client_id: "client_id",
+    axios.post("http://127.0.0.1:8000/project_create", {
+      name: title,
+      description: description,
+      client_id: 1,
       status: "status",
-      estimated_deadline: "estd_time",
+      estimated_deadline: "2022-05-07",
     });
   };
+ 
 
   return (
     <div>
@@ -51,7 +52,7 @@ function Client_newproject() {
               <button
                 className="btn btn-primary mx-2 mb-3"
                 style={{ borderRadius: "50px", fontWeight: "bold" }}
-                onsClick={handleSubmit}
+                onClick={handleSubmit}
               >
                 Add
               </button>

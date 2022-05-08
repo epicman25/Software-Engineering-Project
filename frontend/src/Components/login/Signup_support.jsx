@@ -12,9 +12,7 @@ function Signupsupport() {
   const [values, setValues] = useState({
     username: "",
     password: "",
-    confirmpassword: "",
     email: "",
-    fullname: "",
     phone: "",
     className: "",
   });
@@ -75,7 +73,7 @@ function Signupsupport() {
       username: values.username,
       email: values.email,
       password: values.password,
-      company: values.phone,
+      company: values.Company,
     }).then((res) => {
       console.log(res.values);
     });
