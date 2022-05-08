@@ -217,6 +217,14 @@ async def get_projects():
     }
 
 
+@app.get("/developers/not-assinged")
+async def get_developers():
+    response = await developer_pydantic.from_queryset(Developer.filter(is_assigned = "No"))
+    return {
+        "status": "ok",
+        "data": response
+    }
+
 @app.get("/projects-client/{id}")
 async def get_projects_client(id: int):
     response = await project_pydantic.from_queryset(Project.filter(client_id=id))
