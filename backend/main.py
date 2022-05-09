@@ -127,7 +127,7 @@ async def developer_login(developer: developer_login):
             return{
                 "status": "ok",
                 "message": f"Hello {dev_obj.name}, you are logged in.",
-                "data": dev_obj.dict(exclude_unset=True)
+                "data": dev_obj
 
             }
         else:
