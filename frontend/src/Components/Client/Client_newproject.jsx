@@ -1,24 +1,24 @@
 import React from "react";
 import "../../../node_modules/bootstrap/dist/css/bootstrap.css";
 import { useState } from "react";
-import axios from "axios";
+import Axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 function Client_newproject() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const navigate = useNavigate();
+  const res= JSON.parse(localStorage.getItem("user"))
 
   const handleSubmit = (e) => {
-    axios.post("http://127.0.0.1:8000/project_create", {
+    Axios.post("http://localhost:8000/project_create", {
       name: title,
       description: description,
-      client_id: 1,
-      status: "status",
-      estimated_deadline: "2022-05-07",
+      client_id: res.id,
+      
+      
     });
   };
- 
 
   return (
     <div>

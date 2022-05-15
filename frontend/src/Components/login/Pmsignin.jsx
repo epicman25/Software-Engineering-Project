@@ -2,11 +2,11 @@ import React from "react";
 import { useState } from "react";
 import Axios from "axios";
 import { useNavigate } from "react-router-dom";
-import ClientDashboard from "../Client/ClientDashboard";
-import "./Signin.css";
-function Signin() {
+import ManagerDashboard from "../Project_Manager/ManagerDashboard";
+
+function Pmsignin() {
   const navigate = useNavigate();
-  const url = "http://localhost:8000/user/client";
+  const url = "http://localhost:8000/user/pm";
   const [data, setData] = useState({
     email: "",
     password: "",
@@ -34,11 +34,10 @@ function Signin() {
         setsignindata(res.data.data);
         alert("Login Successful");
         localStorage.setItem("user", JSON.stringify(res.data.data));
-        <ClientDashboard data={res.data.data} />
-        navigate("/clientdashboard");
+        <ManagerDashboard data={res.data.data} />
+        navigate("/managerdashboard");
       }
-
-      else {
+      else{
         alert("Login Failed, check your credentials");
         navigate("/Whoru");
       }
@@ -62,9 +61,8 @@ function Signin() {
               className="form-select select-form"
               aria-label="Default select example"
             >
-              <option selected>Client</option>
-              <option value="1">Project manager</option>
-              <option value="2">Developer</option>
+              <option selected>Project Manager</option>
+              
             </select>
           </div>
           <div className="signin_inputs">
@@ -111,4 +109,4 @@ function Signin() {
   );
 }
 
-export default Signin;
+export default Pmsignin;
