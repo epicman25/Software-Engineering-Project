@@ -148,7 +148,7 @@ async def pm_login(pm: projectmanager_login):
             return{
                 "status": "ok",
                 "message": f"Hello {pm_obj.name}, you are logged in.",
-                "data": pm_obj.dict(exclude_unset=True)
+                "data": pm_obj
             }
         else:
             return{
@@ -168,7 +168,7 @@ async def client_login(client: client_login_pydantic):
             return{
                 "status": "ok",
                 "message": f"Hello {client_obj.username}, you are logged in.",
-                "data": client_obj.dict(exclude_unset=True)
+                "data": client_obj
 
             }
         else:
