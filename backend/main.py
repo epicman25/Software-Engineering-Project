@@ -260,8 +260,6 @@ async def update_project_dev(id: int, project: project_pydanticUpdateClient):
         "data": response
     }
 
-
-@app.get("")
 @app.put("/assign-project/{id}")
 async def assign_project(id: int, developer: dev_project_assign):
     dev_obj = await Developer.get(id=id)

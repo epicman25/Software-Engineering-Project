@@ -12,8 +12,10 @@ function Signupsupport() {
   const [values, setValues] = useState({
     username: "",
     password: "",
+    
     email: "",
-    phone: "",
+    company:"",
+  
     className: "",
   });
 
@@ -55,11 +57,11 @@ function Signupsupport() {
 
     {
       id: 4,
-      name: "Company",
+      name: "company",
       type: "text",
 
       placeholder: "Enter your company name",
-      label: "Company",
+      label: "company",
 
       required: true,
       className: "mb-2",
@@ -73,11 +75,13 @@ function Signupsupport() {
       username: values.username,
       email: values.email,
       password: values.password,
-      company: values.Company,
+      company: values.company,
     }).then((res) => {
-      console.log(res.values);
+      navigate("/signin");
     });
   };
+
+
 
   const onChange = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value });
